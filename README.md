@@ -29,10 +29,9 @@ So I created **two versions**:
 
 #### Version 1: NumPy (Lightweight)
 - Precomputes embeddings offline
-- Ships `embeddings.npy` + `docs.json` files (~60MB)
+- Ships `embeddings.npy` + `docs.json` files (~35MB)
 - Runs on Railway's free tier
 - Can't update the corpus without regenerating embeddings
-- **Best for**: Demos, static deployments, resource-constrained hosting
 
 #### Version 2: Pinecone (This Version)
 - Connects to Pinecone's managed vector database
@@ -41,7 +40,7 @@ So I created **two versions**:
 - **Best for**: Development, production with proper infrastructure, frequently updated legal corpus
 
 This README covers **Version 2**—the one that talks directly to Pinecone.
-
+For the Version 1 : [Click Here](https://github.com/theunknownodysseus/indian-law-rag-pipeline-locallyfetched)
 ---
 
 ## Architecture Overview
