@@ -566,21 +566,16 @@ curl -X POST http://localhost:8000/ask \
 
 ### Why This Version is Harder to Deploy
 
-The ~2GB Docker image (PyTorch + SentenceTransformers) exceeds free-tier limits on most platforms:
+The ~7GB Docker image (PyTorch + SentenceTransformers) exceeds free-tier limits on most platforms:
 
 | Platform | Free Tier Limit | Will This Deploy? |
 |----------|----------------|-------------------|
-| Railway | 1GB image | ❌ No |
+| Railway | 4.4 GB image | ❌ No |
 | Render | 512MB RAM | ❌ No |
 | Fly.io | 256MB RAM | ❌ No |
 | Heroku | 512MB RAM | ❌ No |
-| AWS Lambda | 10GB image | ✅ Yes (but cold start ~30s) |
-| Google Cloud Run | 4GB image | ✅ Yes |
-| Azure Container Instances | 4GB image | ✅ Yes |
+| AWS Lambda | 10GB image | ✅ Yes (but cold start ~30s) 
 
-### Recommended Deployment: Google Cloud Run
-
-Cloud Run supports large containers and has a generous free tier (2M requests/month).
 
 **Dockerfile:**
 
@@ -597,41 +592,6 @@ COPY . .
 ENV PORT=8080
 CMD uvicorn app:app --host 0.0.0.0 --port $PORT
 ```
-
-**Deploy:**
-
-```bash
-gcloud run deploy indian-law-rag \
-  --source . \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --memory 4Gi \
-  --timeout 60s
-```
-
-Set environment variables in Cloud Run console:
-- `PINECONE_API_KEY`
-- `OPENROUTER_API_KEY`
-
-### Alternative: Run on a VPS
-
-Cheapest option with full control:
-
-1. Get a $5/month DigitalOcean droplet (2GB RAM)
-2. Install Docker
-3. Clone repo and run:
-
-```bash
-docker build -t indian-law-rag .
-docker run -d \
-  -p 8000:8000 \
-  -e PINECONE_API_KEY=your_key \
-  -e OPENROUTER_API_KEY=your_key \
-  indian-law-rag
-```
-
-4. Use nginx as reverse proxy with SSL
-
 ---
 
 ## The Offline Pipeline (Creating the Index)
